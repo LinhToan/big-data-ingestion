@@ -63,7 +63,7 @@ def process_table(folder: str, table: str, start_date: date, end_date: date) -> 
         day_str = day.strftime('%Y/%m/%d')
         try:
             df = spark.read.parquet(f"{path}/{folder}/{table}/{day_str}/*.parquet")
-            df.withColumn('utc_timestamp', lit(day))
+            df = df.withColumn('utc_timestamp', lit(day))
             df = clean_columns(df)
             df_columns = set(df.columns)
             dataframes.append(df)
@@ -132,5 +132,6 @@ def update_status(table: str, start_date: date, today: date) -> int:
         WHERE table_name = '{table}'
         AND start_date = '{start_date}'
     """)
+
 
     return 0
